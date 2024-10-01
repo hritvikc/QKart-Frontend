@@ -11,7 +11,7 @@ import "./Login.css";
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [formData, setFormData] = useState({username: '', password: ''});
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   // TODO: CRIO_TASK_MODULE_LOGIN - Fetch the API response
@@ -40,23 +40,26 @@ const Login = () => {
    *
    */
   const login = async (formData) => {
-    if (validateInput(formData)){
-      try{
+    if (validateInput(formData)) {
+      try {
         setIsLoading(true);
         const res = await axios.post(`${config.endpoint}/auth/login`, {
           username: formData.username,
-          password: formData.password
+          password: formData.password,
         });
         setIsLoading(false);
         persistLogin(res.data);
-        enqueueSnackbar("Logged in successfully", { variant: 'success' });
-        history.push('/');
-      }catch(err){
+        enqueueSnackbar("Logged in successfully", { variant: "success" });
+        history.push("/");
+      } catch (err) {
         setIsLoading(false);
         if (err.response)
-          enqueueSnackbar(err?.response?.data?.message, { variant: 'error' });
-        else 
-        enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.", { variant: 'error' });
+          enqueueSnackbar(err?.response?.data?.message, { variant: "error" });
+        else
+          enqueueSnackbar(
+            "Something went wrong. Check that the backend is running, reachable and returns valid JSON.",
+            { variant: "error" }
+          );
       }
     }
   };
@@ -76,21 +79,22 @@ const Login = () => {
    * -    Check that username field is not an empty value - "Username is a required field"
    * -    Check that password field is not an empty value - "Password is a required field"
    */
-  const validateInput = ({username, password}) => {
-    if (username === '') {
-      enqueueSnackbar("Username is a required field", {variant: "warning"});
+  const validateInput = ({ username, password }) => {
+    if (username === "") {
+      enqueueSnackbar("Username is a required field", { variant: "warning" });
       return false;
-    }
-    else if (username.length < 6){
-      enqueueSnackbar("Username must be at least 6 characters", {variant: "warning"});
+    } else if (username.length < 6) {
+      enqueueSnackbar("Username must be at least 6 characters", {
+        variant: "warning",
+      });
       return false;
-    }
-    else if (password === ''){
-      enqueueSnackbar("Password is a required field", {variant: "warning"});
+    } else if (password === "") {
+      enqueueSnackbar("Password is a required field", { variant: "warning" });
       return false;
-    }
-    else if (password.length < 6){
-      enqueueSnackbar("Password must be at least 6 characters", {variant: "warning"});
+    } else if (password.length < 6) {
+      enqueueSnackbar("Password must be at least 6 characters", {
+        variant: "warning",
+      });
       return false;
     }
     return true;
@@ -112,7 +116,7 @@ const Login = () => {
    * -    `username` field in localStorage can be used to store the username that the user is logged in as
    * -    `balance` field in localStorage can be used to store the balance amount in the user's wallet
    */
-  const persistLogin = ({token, username, balance}) => {
+  const persistLogin = ({ token, username, balance }) => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     localStorage.setItem("balance", balance);
@@ -137,7 +141,12 @@ const Login = () => {
             name="username"
             placeholder="Enter Username"
             fullWidth
-            onChange={(e) => setFormData((prevData) => ({...prevData,username: e.target.value}))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                username: e.target.value,
+              }))
+            }
           />
           <TextField
             id="password"
@@ -148,18 +157,31 @@ const Login = () => {
             helperText="Password must be atleast 6 characters length"
             fullWidth
             placeholder="Enter a password with minimum 6 characters"
-            onChange={(e) => setFormData((prevData) => ({...prevData,password: e.target.value}))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                password: e.target.value,
+              }))
+            }
           />
-          {isLoading ? <Box style={{display: "flex", justifyContent: "center"}}><CircularProgress /></Box> : 
-          <Button className="button" variant="contained" onClick={() => login(formData)}>
-            LOGIN TO QKART
-          </Button>
-          }
+          {isLoading ? (
+            <Box style={{ display: "flex", justifyContent: "center" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Button
+              className="button"
+              variant="contained"
+              onClick={() => login(formData)}
+            >
+              LOGIN TO QKART
+            </Button>
+          )}
           <p className="secondary-action">
-          Don’t have an account?{" "}
-          <Link className="link" to="/register">
+            Don’t have an account?{" "}
+            <Link className="link" to="/register">
               Register now
-          </Link>
+            </Link>
           </p>
         </Stack>
       </Box>
