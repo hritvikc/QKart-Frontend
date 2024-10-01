@@ -11,6 +11,9 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
 
   const clear = () => {
     localStorage.clear();
+    if (window.location.href.includes("checkout") || window.location.href.includes("thanks")){
+      history.push("/");
+    }
     window.location.reload();
   };
 
